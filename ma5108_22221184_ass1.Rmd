@@ -1,0 +1,103 @@
+---
+title: "ma5108_22221184"
+author: "amp"
+date: "2022-09-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+patientID
+
+    A1,A2,B1,B2,C1,C2
+
+CEA
+
+    35,2.1,8,15,0.3,4.2
+
+S100_A9
+
+    378.5, 28.2, 48.1, 138.8, 0.2, 1.4
+
+Each question is worth 1 mark.
+
+    Create vectors for each variable - use sensible variable names of your own choice (hint: remember that some of these are lists of numbers, whilst others are lists of characters)
+```{r}    
+patientID<- c("A1","A2","B1","B2","C1","C2")
+CEA<- c(35,2.1,8,15,0.3,4.2)
+S100_A9<- c(378.5,28.2,48.1,138.8,0.2,1.4)
+```
+    
+    
+
+    Create a new vector having converted the S100_A9 to log10 format (hint: to the base 10 - look up the function log10() using the R help facility)
+```{r}    
+log10vS100_A9<-log10(S100_A9)
+log10vS100_A9
+```
+    
+    Combine the three vectors (using the log10 version for S100_A9) into a dataframe called exosome_study_df with the following column headers: ID, Antigen, Protein - view the contents of the dataframe to satisfy yourself that it has worked
+```{r}    
+exosome_study_df<-data.frame(ID=patientID,Antigen=CEA,Protein=log10vS100_A9)
+View(exosome_study_df)
+```
+   
+   
+    Use the nrow() and ncol() commands to determine the number of rows and columns in this dataframe, and finally the dim() command to get both of these together.
+```{r}
+nrow(exosome_study_df)
+ncol(exosome_study_df)
+dim(exosome_study_df)
+```
+
+
+    Extract the column corresponding to the column header Antigen
+```{r}
+exosome_study_df["Antigen"]
+```
+
+    Extract the column corresponding to the column header Protein and convert this from log10 back to it's normal values, place this output in a new vector variable Protein_normal (hint: remember that to go from `log10' back to the original number you need to raise the log10 value to the power 10)
+```{r}
+exosome_study_df["Protein"]
+Proein_normal<-10^exosome_study_df$Protein
+Proein_normal
+```
+    
+
+    Extract the row corresponding to the row with the patient ID B2
+```{r}
+exosome_study_df[4,]
+```
+    The R commands min(), mean(), and max() generate the minimum, maximum and mean values in a vector (or column). Use these commands to find out the min, max and mean of the columns Antigen and Protein
+```{r}
+min(exosome_study_df$Antigen)
+max(exosome_study_df$Antigen)
+mean(exosome_study_df$Antigen)
+min(exosome_study_df$Protein)
+max(exosome_study_df$Protein)
+mean(exosome_study_df$Protein)
+```

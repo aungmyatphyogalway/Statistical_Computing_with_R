@@ -1,0 +1,66 @@
+---
+title: "assignment7"
+author: "aungmyatphyo"
+date: "2022-10-06"
+output: html_document
+---
+
+##Part1
+```{r}
+dat <- read.csv("two_way_anova.csv",header=T)
+attach(dat)
+```
+
+```{r}
+boxplot(fold_change[which(batch=='A')],fold_change[which(batch=='B')],fold_change[which(batch=='C')],fold_change[which(batch=='D')],xlab='Sites',ylab='Fold Change')
+axis(1,at=1:4,labels=c("A","B","C","D"))
+title(main="Boxplots for Fold Change against Site")
+```
+##1.1 It appears that different fold changes happened at different research facilities.Interquatile range of fold changes in B is the highest (roughly 0.3-0.9) among the facilities. The Interquatile range of fold changes in A and C is similar(approximately 0.3-0.4).That in D is from 0.3 to 0.7.There is an outlier(fold change)in C.
+
+```{r}
+boxplot(fold_change[which(radiation_dose==2)],fold_change[which(radiation_dose==5)],fold_change[which(radiation_dose==10)],xlab='Dose',ylab='Fold Change')
+axis(1,at=1:3,labels=c("2 Gy","5 Gy","10 Gy"))
+title(main="Boxplots for Fold Change against Dose")
+```
+#1.1 It appears that fold change in 2Gy is slightly higher than that in 5Gy while 2Gy fold change is much higher than 10Gy. Interquatile range for 2Gy,5Gy,10Gy are 0.5-0.7, 0.6-0.3, 0.3-0.2 respectively. There is also an oulier (1.2 fold change 0 in 5Gy.
+
+```{r}
+ra.cat<-radiation_dose
+ra.cat[ra.cat==2]<-"low"
+ra.cat[ra.cat==5]<-"medium"
+ra.cat[ra.cat==10]<-"high"
+table(ra.cat)
+ra.cat
+anova(lm(fold_change~ra.cat))
+anova(lm(fold_change~batch))
+```
+##1.2
+P-value of independent variable,radiation dose(ra.cat)is 765e-05 (p<0.05),it is likely that radiaiton dose amount(low,medium,high) have a significant effect on fold change.
+
+P-value of independent variable,batch is 0.0009921 (p<0.05),it is possible that different batch/research  facilities(A,B,C,D) have a significant effect on fold change.
+
+##Part2
+##1.3
+#Two way anova is correct approach for this case because it has 4 or more groups and multiple factors. 4 or more groups are low,medium,high radiation doses groups and A,B,C,D 4 different batch/research facilities. Multiple factors are radiation doses and batch.
+
+##1.4
+```{r}
+anova(lm(fold_change~ batch+ra.cat))
+```
+
+#1.5
+```{r}
+anova(lm(fold_change~ batch+ra.cat+batch*ra.cat))
+```
+
+##1.6
+According to boxplot between fold change and radiation dose(2,5,10Gy),different values of fold change are happened due to different radiation dose. According to 2way Anova test, p-value of independent variable,radiation dose(ra.cat) is 5.704e-0.7.This shows that different radiation doses have a sigificant effect on fold changes.The assumptions through boxplot and 2 way Anova test is the same.
+
+According to boxplot between fold change and batch/research facilities(A,B,C,D),different levels of fold changes can be got due to different batch. Due to 2way Anova test, p-value of independent variable,batch, is 6.697e-06. This claims that different batch have a significant effect on fold changes.The assumptions through boxplot and 2way Anova test is the same.
+
+#1.7
+According to 2way Anova test,p-value of independent variable,radiation dose(ra.cat) is 5.704e-0.7.This shows that different radiation doses have a sigificant effect on fold changes.
+Due to 2way Anova test, p-value of independent variable,batch, is 6.697e-06. This claims that different batch have a significant effect on fold changes.
+According to 2way Anova test with interaction effect,p-value of independent variable,radiation dose(ra.cat) is 3.331e-0.7.This shows that different radiation doses have a sigificant effect on fold changes.P-value of independent variable,batch, is 3.777e-06. This claims that different batch have a significant effect on fold changes.However, p-value for interaction effect is 0.1123 and it accepts null hypothesis(the effect of radiation dose on fold change does not depend on the effect of batch/this means no interaction effect).
+

@@ -1,0 +1,80 @@
+---
+title: "assignment4"
+author: "aung myat phyo"
+date: "2022-09-16"
+output: html_document
+---
+
+```{r}
+install.packages("pwr")
+library("pwr")
+```
+
+The male androgen hormones testosterone and dihydrotestosterone contribute to the progression in prostate cancer, and the use of androgen deprivation therapy (ADT) is considered a standard treatment protocol for metastatic disease. Treatment using LHRH agonists typically reduces the blood serum concentration of testosterone from an average of 540 ng/dl to what is considered castration levels of ~ 50 ng/dl. Working with colleagues you wish to design an experiment that assesses the efficacy of a novel LHRH agonist, with two groups of otherwise healthy male patients - one group will get the LHRH agonist, the other a placebo. Prior to the study, the mean/standard deviation of blood serum for all participants is 540/180. Assuming the drug works, the treated group would be expected to have a testosterone level of at most 50 ng/dl.
+
+    Perform a power calculation to determine the optimum number of volunteers to include in the study, assuming the study is powered to 80% and efficacy is assessed at the 5% level of significance, and that the same standard deviation is associated with the castration-effective response. 
+
+```{r}
+mean1<-540
+mean2<-50
+ssd<-180
+d<-(mean1-mean2)/ssd
+```
+
+```{r}
+pwr.t.test(n= , d=d, sig.level = 0.05, power = 0.8, type = "two.sample")
+```
+
+
+    Actual studies indicate the standard deviation of the measured testosterone blood concentration for castration-like conditions is typically 10% of the measured value - so for a 50 ng/dl cutoff, this would be 5 ng/dl. Given that the differences in standard deviations require a modified calculation of the effect size, re-calculate the optimum number of volunteers for the same power and significance level.  [2 marks]
+```{r}
+sdd2<-5
+z<-sqrt((180^2+5^2)/2)
+d2<-(mean1-mean2)/z
+```
+
+```{r}
+pwr.t.test(n=, d=d2, sig.level = 0.05, power = 0.8, type="two.sample")
+```
+
+
+    
+    Finally, we might imagine that we would want to be as stringent as possible in avoiding false negatives - if we enrolled 10 volunteers for each group, and tested the hypothesis that the drug had no effect at the 5% significance level, how powered would our experiment be? What about at the 0.1% level?  [2 marks]
+```{r}
+pwr.t.test(n=10, d=2.72, sig.level = 0.05, power = , type = "two.sample")
+```
+
+```{r}
+pwr.t.test(n=10, d=2.72, sig.level = 0.001, power= , type = "two.sample")
+```
+
+    Comment on the fact that clinical trials of LHRH agonists typically involve between 50 and 60 patients per sample group.  [3 marks]
+```{r}
+pwr.t.test(n=50, d=2.72, sig.level = 0.05, power= , type = "two.sample")
+```
+
+```{r}
+pwr.t.test(n=60, d=2.72, sig.level = 0.05, power= , type = "two.sample")
+```
+
+Power of the test is dependent on the sample size. If sample size small (3),the power is at 0.8. While the sample size increases to 10, the power is 0.99. When sample size between 50 and 60 sample size, power is 1. 50 and 60 sample size are enough.
+
+    Illustrate your markdown document with plots as appropriate to demonstrate how power varies as a function of numbers of patients enrolled.  [3 marks]
+```{r}
+no_of_patients<-seq(1,20,by=1)
+power_test=pwr.t.test(n = no_of_patients , d = 2.72, sig.level = 0.05, power = , type = "two.sample")
+```
+
+```{r}
+par(mfrow=c(1,1),oma=c(0,0,0,0),mar=c(4.5,4.5,0.5,0.5))
+plot(no_of_patients,power_test$power,type='b',pch=16,las=1,
+     ylab='statistical power',xlab='no of patients',
+     cex.lab=1.4, cex.axis=1.2, ylim = c(0,1))
+abline(h = 0.7, lty=2, lwd=2,col='blue')
+```
+
+Report presentation  [2 marks]
+Number of patients(sample size)is positively correlated with the statistical power.
+Below number of patients under 5, the statistical power runs from 0.3 to 0.9 progressively. After number of patients(7), the statical power always stands at 1.
+
+

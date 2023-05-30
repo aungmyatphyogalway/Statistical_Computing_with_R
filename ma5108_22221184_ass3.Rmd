@@ -1,0 +1,130 @@
+---
+title: "assignment3"
+author: "aung myat phyo"
+date: "2022-09-15"
+output: html_document
+---
+
+Part 1
+Two experiments measuring the abundance of a bacterial species from inflamed colon epithelial cells, and from non-inflamed epithelial cells, have been shown data that can be 'fitted' (fit?) by a normal distributions - the first typically produces a distribution of abundance measures with a mean of 340.0 and standard deviation of 85.0, the second with a mean of 120.0 and standard deviation of 75.0
+  1. simulate 3 experiments for both the inflamed and non-inflamed conditions using these means/standard deviations, and report the means and standard deviations for each set of experiments you have performed `in silico'.
+```{r}
+mean1<- 340.0
+sd1<- 85.0
+mean2<-120.0
+sd2<-75.0
+```
+
+```{r}
+exp1<- rnorm(n=10,mean1,sd1)
+exp1
+```
+
+```{r}
+exp2<- rnorm(n=10,mean1,sd1)
+exp2
+```
+
+```{r}
+exp3<- rnorm(n=10,mean1,sd1)
+exp3
+```
+
+```{r}
+exp4<- rnorm(n=10,mean2,sd2)
+exp4
+```
+
+```{r}
+exp5<-rnorm(n=10,mean2,sd2)
+exp5
+```
+
+```{r}
+exp6<-rnorm(n=10,mean2,sd2)
+exp6
+```
+
+```{r}
+mean(exp1, na.rm = T)
+sd(exp1, na.rm = T)
+mean(exp2, na.rm = T)
+sd(exp2, na.rm = T)
+mean(exp3,na.rm = T)
+sd(exp3, na.rm = T)
+mean(exp4,na.rm=T)
+sd(exp4, na.rm=T)
+mean(exp5,na.rm=T)
+sd(exp5,na.rm=T)
+mean(exp6, na.rm= T)
+sd(exp6, na.rm=T)
+```
+
+
+ 2. create a plot, with appropriate labels, showing both boxplots, one for each experiment dataset - comment on the data as presented.  [2 marks]
+ 
+```{r}
+expo<-data.frame(inflamed=exp1, non_inflamed=exp4)
+boxplot(expo, main="inflamed and non_inflamed colon epithelial cells")
+```
+In this box plot, median of inflamed is at around 300 while median of non inflamed stands at around 100. IQR for inflamed exists between around 250 and around 350.
+IQR for noninflamed is over and under 100.
+ 
+  3. perform a t-test to test the null hypothesis that the bacterial abundance is not statistically different between the inflamed and non-inflamed conditions. [2 marks]
+```{r}
+var.test(exp1,exp4)
+```
+
+```{r}
+t.test(exp1,exp4,pair=TRUE)
+```
+
+  4. repeat (1) - (3) for (i) 5 replicates each (ii) 20 replicates each, and comment on the change in significance, if any. Tabulate the resulting p-values as a function of replicates as a final markdown section of your report. 
+```{r}
+exp7<-rnorm(n=5,mean1,sd1)
+exp8<-rnorm(n=5,mean2,sd2)
+exp9<-rnorm(n=20,mean1,sd1)
+exp10<-rnorm(n=20,mean2,sd2)
+```
+
+```{r}
+var.test(exp7,exp8)
+```
+
+```{r}
+t.test(exp7,exp8,pair=TRUE)
+```
+
+```{r}
+var.test(exp9,exp10)
+```
+
+```{r}
+t.test(exp9,exp10,pair=TRUE)
+```
+
+p value for sample size 5 is 0.006, that for sample size 10 and 20 are 3.697e-05 
+and 5.168e-07. The greater sample size, the lesser p value showing the more significant between two tests.
+
+```{r}
+p<-c(0.006, 3.697e-05,5.168e-07)
+```
+
+```{r}
+ptable<-data.frame(pval=p)
+```
+
+part2
+```{r}
+minuslambda<-log(0.0001)
+```
+
+```{r}
+lambda<- 9.21
+genome_length_fungus<-3*10^7
+short_read_length<-100
+total_no_of_read<- lambda*genome_length_fungus/short_read_length
+total_no_of_read
+```
+
+To ensure 99.99 percent coverage of this fungus genome, the estimated total number of reads is 2.7 millions read because genome length of fungus is 30Mb and single end read is 100bp.

@@ -1,0 +1,92 @@
+---
+title: "assignment8"
+author: "aungmyatphyo"
+date: "2022-10-07"
+output: html_document
+---
+#1.1
+```{r}
+colon<- read.csv("colon_data.csv", header = T)
+head(colon)
+library(splines)
+library(survival)
+attach(colon)
+list(colon$rx)
+logrank1<-survdiff(Surv(colon$time,colon$status)~colon$rx)
+logrank1
+sfit1<-survfit(Surv(colon$time,colon$status)~colon$rx)
+plot(sfit1, lty=c("solid","dashed"),col=c("blue","red"), xlab="survival times in days", ylab="survival probability")
+title("Performance of the adjuvant therapy against placebo over duration of trial")
+legend("topright", c("adjuvant therapy","placebo"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+p-value is 1e-05 that rejects the null hypothesis.There is a significance difference between two groups(adjuvant therapy/placebo) in terms of survival.
+
+##1.2
+```{r}
+obs<- colon[colon$rx=="Obs",]
+obs
+adj<- colon[colon$rx=="Lev+5FU",]
+adj
+```
+
+```{r}
+attach(obs)
+logrank2<-survdiff(Surv(obs$time,obs$status)~obs$sex)
+logrank2
+sfit2<-survfit(Surv(obs$time,obs$status)~obs$sex)
+plot(sfit2,lty = c("solid","dashed"),col=c("blue","red"),xlab="survival times in days", ylab="survival probability")
+title("the effect of gender on survival within placebo")
+legend("topright",c("female","male"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+Within the placebo group,there is no significance difference between gender(male & female) in terms of survival because of p-value(0.8).
+
+```{r}
+attach(adj)
+logrank3<-survdiff(Surv(adj$time,adj$status)~adj$sex)
+logrank3
+sfit3<-survfit(Surv(adj$time,adj$status)~adj$sex)
+plot(sfit3,lty = c("solid","dashed"),col=c("blue","red"),xlab="survival times in days", ylab="survival probability")
+title("the effect of gender on survival within treated cohorts")
+legend("topright",c("female","male"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+In the treated cohorts,there is a significance difference between male and female groups in terms of survival due to p-value,0.008.
+
+##1.3
+```{r}
+attach(colon)
+logrank4<-survdiff(Surv(colon$time,colon$status)~colon$node4)
+logrank4
+sfit4<-survfit(Surv(colon$time,colon$status)~colon$node4)
+plot(sfit4, lty=c("solid","dashed"),col=c("blue","red"), xlab="survival times in days", ylab="survival probability")
+title("impact having more than 4 positive lymphnodes")
+legend("topright", c("more than 4 lymphnodes","less than 4"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+p-value is 1e-13, so there is a significance difference between more than and less than 4 lymphnodes in terms of survival.
+
+```{r}
+attach(obs)
+logrank5<-survdiff(Surv(obs$time,obs$status)~obs$node4)
+logrank5
+sfit5<-survfit(Surv(obs$time,obs$status)~obs$node4)
+plot(sfit5,lty = c("solid","dashed"),col=c("blue","red"),xlab="survival times in days", ylab="survival probability")
+title("the effect of having more than 4 positive lymphnodes on survival within placebo group")
+legend("topright",c("more than 4","less than 4"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+In placebo group, there is a significance difference between more than and less than 4 lymphnodes in terms of survival due to p-value,7e-07.
+
+```{r}
+attach(adj)
+logrank6<-survdiff(Surv(adj$time,adj$status)~adj$node4)
+logrank6
+sfit6<-survfit(Surv(adj$time,adj$status)~adj$node4)
+plot(sfit6,lty = c("solid","dashed"),col=c("blue","red"),xlab="survival times in days", ylab="survival probability")
+title("the effect of having more than 4 positive lymphnodes on survival within treated cohorts")
+legend("topright",c("more than 4","less than 4"),lty = c("solid","dashed"),col=c("blue","red"))
+```
+In treated with adjuvant therapy group, there is a significant effect between more than and less than 4 lymphnodes in terms of survival due to p-value(2e-08).
+
+In survival based on gender, there is no significant difference in placebo group. However, there is significant different in adjuvant therapy group(males>females in survival).
+
+In survival based on number of positive lymphnodes(more than & less than 4),there is a significant difference in not only placebo and therapy groups.
+
+In conclusion, less than 4 positive lymphnodes is higher survival rate while male has higher survival rate in only adjuvant groups(male= female survival while placebo is prescribed).

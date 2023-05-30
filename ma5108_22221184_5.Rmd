@@ -1,0 +1,67 @@
+---
+title: "assignment 5"
+author: "aungmyatphyo"
+date: "2022-10-03"
+output: html_document
+---
+
+
+## (1)A contingency table is one of the tables that shows frequency distribution of the variables in matrix format. It includes outcome of 1st variable in rows and the remaining one in columns.
+
+##The basic of Fisher's exact test is that number of sample N is from 10 to 100 and a contigency table(2x2)with data.
+
+## it can be used for Goodness of fit between two groups, in which sample size is small. To show the statistically different or not between these groups, Fisher exact test can be used.
+
+## 2.1
+```{r}
+dnarepair_alter<- c(2,26)
+dnarepair_notalter<- c(15,182)
+data1<- data.frame(dnarepair_alter,dnarepair_notalter, row.names = c("male","female"), stringsAsFactors = FALSE)
+colnames(data1)<- c("dnarepairalter","dnareapirnotalter")
+data1
+fdata1<-fisher.test(data1,alternative = "two.sided")
+fdata1
+```
+
+
+```{r}
+h<- c(0,8)
+hnot<- c(17,200)
+data2<- data.frame(h,hnot, row.names = c("male","female"),stringsAsFactors = FALSE)
+colnames(data2)<- c("hormone_alter","hormone_notalter")
+data2
+fdata2<-fisher.test(data2,alternative = "two.sided")
+fdata2
+```
+
+```{r}
+akt<- c(5,126)
+akt_not<- c(12,82)
+data3<- data.frame(akt,akt_not, row.names = c ("male","female"),stringsAsFactors = FALSE)
+colnames(data3)<- c("Akt","not_Akt")
+data3
+fdata3<- fisher.test(data3, alternative = "less")
+fdata3
+```
+
+```{r}
+mapk<- c(4,15)
+mapk_not <- c(13,193)
+data4<- data.frame(mapk,mapk_not, row.names = c("male","female"),stringsAsFactors = FALSE)
+data4
+fdata4<- fisher.test(data4, alternative = "greater")
+fdata4
+```
+
+##2.2
+According to Fisher's Exact statistical test, p-value of DNA repair(altered and not altered) between male and female is 1 while alternative hypothesis is two.sided. So p-value 1 accept the null hypothesis (there is no significant difference of DNA repair between male and female).
+
+p value for homology recombination(altered and not altered)between male and female is also 1 which accepts the null hypothesis (no significant different in hormology recombination between different gender) while alternative hypothesis is two.sided.
+
+While alternative hypothesis is less, p-value for P13K,Akt,mTOR is 0.012 which rejects the null hypothesis of male is significantly greater than female.
+Actually,female of P13K pathway is statistically significant than male.
+
+While alternative hypothesis is greater, p-value for MAPK/ERK pathway is 0.04272 which rejects the null hypothesis of male is significantly less than female.
+For MAPK/ERK pathway, male is statistically significant than female.
+
+Because of these results, specific drug treatment to inhibit MAPK/ERK pathway is more beneficial for male breast cancer patients with luminal A like disease while drugs for P13K/Akt/mTOR pathway inhibition is not so beneficial for male patients.

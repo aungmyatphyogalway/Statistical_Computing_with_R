@@ -1,0 +1,32 @@
+---
+title: "Assignment 6"
+author: "aungmyatphyo"
+date: "2022-10-04"
+output: html_document
+---
+
+##(1) pchisq(q,df,ncp=0, lower.tail= TRUE, log.p= FALSE)
+
+#q means for quantiles vector
+
+#df means degree of freedom and it can be calculated from (number of rows in contingency table -1 x number of columns in the table - 1 )
+
+#ncp means non central parameter (not negative)
+
+#when lower.tail= TRUE, probabilities are P(X<=x), and on the other side,P(X>x)
+
+#if log.p is false, probabilities are not given as log(p)
+
+
+
+#(2)
+```{r}
+observed<- c(623,1456)
+refseq<- c(45236,54764)
+da<- data.frame(observed,refseq, row.names = c("exons","outside_exons"),stringsAsFactors = FALSE)
+colnames(da)<- c("observe","ref")
+da
+chisq.test(da)
+```
+
+#according to p-value 2.2e-16, it rejects the null hypothesis  that experimental data is consistent with no bias in actual retroviral insertion sites between exon and non_exon regions within genes at very significant level.

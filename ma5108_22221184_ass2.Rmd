@@ -1,0 +1,116 @@
+---
+title: "assignment2"
+author: "amp"
+date: "2022-09-13"
+output: html_document
+---
+
+Part 1
+A gene expression experiment for assessing the presence of the HER2 transcript has been performed.
+Five replicates were performed
+For the HER2+ samples
+
+    456.0,433.0,399.0,478.0,493.0
+
+For the HER2- samples
+
+    124.0,133.0,119.0,129.0,101.0
+
+Determine the following
+
+    the mean and std deviations of both samples
+```{r}
+HER2possamples<- c(456.0,433.0,399.0,478.0,493.0)
+HER2negsamples<- c(124.0,133.0,119.0,129.0,101.0)
+mean(HER2possamples)
+sd(HER2possamples)
+mean(HER2negsamples)
+sd(HER2negsamples)
+```
+   
+   a box plot for each dataset
+```{r}
+boxplot(HER2possamples)
+```
+
+```{r}
+boxplot(HER2negsamples)
+```
+    the output of a t-test to determine if the two distributions are likely from the same underlying distribution, or whether they are likely different
+```{r}
+t.test(HER2possamples,HER2negsamples)
+```
+    Write a short conclusion on what these representations of the data appear to indicate.
+These two data representations are significantly different because of p-value(9.501e-06).   
+
+Part 2
+Recall from yesterday's assignment we worked on an example liquid biopsy study - you should have generated a dataframe consisting of 6 rows of 3 columns, with the column headers delineated as ID, Antigen and Protein.
+For the first part of this assignment we are going to work with this dataframe, so start by copying the code you wrote yesterday to create the same dataframe, this time using the original S100 A9 values.
+```{r}
+patientID<- c("A1","A2","B1","B2","C1","C2")
+CEA<- c(35,2.1,8,15,0.3,4.2)
+S100_A9<- c(378.5,28.2,48.1,138.8,0.2,1.4)
+```
+
+```{r}
+exosome_study_df<-data.frame(ID=patientID,Antigen=CEA,Protein=S100_A9)
+exosome_study_df
+```
+Then use the command rownames() to rename the row name index from 1,2,3... to A1, A2, B1... and then delete the column ID from the dataframe (as it is no longer needed). For the latter, check out the practical and also https://stackoverflow.com/questions/6286313/remove-an-entire-column-from-a-data-frame-in-r
+
+```{r}
+rownames(exosome_study_df)<-exosome_study_df[,1]
+exosome_study_df[,1]<-NULL
+exosome_study_df
+```
+Having done this, answer the following questions:
+
+    The Antigen column corresponds to the values of CEA, a glycoprotein produced by ~ 90% of colorectal cancer cells, typically measured in ng/mL. The normal range is 0 - 2.5, a value > 8 suggests extensive disease and a value > 20 suggests metastasis. Use the rownames() function to determine the patient IDs for whom their Antigen values are greater or equal to 8.0.
+```{r}
+row.names(exosome_study_df)[exosome_study_df$Antigen >= 8.0]
+```
+
+    Use the subset() command combined with variants of the previous R command to separate the original dataframe into two new dataframes, high_values and low_values, depending on whether the Antigen value is >= 8 or < 8. Determine the means and standard deviations of these two new dataframes, and generate boxplots for each
+```{r}
+high_values<-subset(exosome_study_df,exosome_study_df$Antigen >=8)
+high_values
+```
+
+```{r}
+low_values<-subset(exosome_study_df,exosome_study_df$Antigen <8)
+low_values
+```
+
+```{r}
+mean(low_values$Antigen)
+sd(low_values$Antigen)
+mean(high_values$Antigen)
+sd(high_values$Antigen)
+```
+
+```{r}
+boxplot(high_values$Antigen)
+```
+
+```{r}
+boxplot(low_values$Antigen)
+```
+    Using the same high and low dataframes, calculate the corresponding means and standard variations for the Protein values and again, generate boxplots for each.
+```{r}
+mean(high_values$Protein)
+sd(high_values$Protein)
+mean(low_values$Protein)
+sd(low_values$Protein)
+```
+
+```{r}
+boxplot(high_values$Protein)
+```
+
+```{r}
+boxplot(low_values$Protein)
+```
+
+    Comment on the differences/similarities in the Antigen and Protein boxplots - what does this seem to imply as regards the Protein biomarker?
+
+According to Antigen boxplots, mean of high_values is 15 and that of low value is 2.In addition, mean of high_values on protein boxplot is around 150 while mean of low_values protein is under 5. Because of this data, this protein biomarker is significant for diagnosis.  
